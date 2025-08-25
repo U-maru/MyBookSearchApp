@@ -1,13 +1,174 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap 5 書籍検索フォーム</title>
 
-        <title>書籍情報検索</title>
-    </head>
-    <body>
-        <h1>Hello, HTML!!</h1>
-        <img src="https://ndlsearch.ndl.go.jp/thumbnail/9784098626786.jpg"/>
-    </body>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        body {
+            background: linear-gradient(45deg, #6a11cb, #2575fc, #f97794, #623aa2);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px); /* 背景をぼかす効果を追加 */
+        }
+        
+        /* 星レーティングのための簡単なスタイル */
+        .rating {
+            display: inline-block;
+            direction: rtl; /* 星を右から左へ並べる */
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #ffc107;
+        }
+
+    </style>
+</head>
+<body>
+
+    <main class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+
+                <div class="text-center mb-4">
+                    <h1 class="display-5 fw-bold text-white shadow-sm">📚 書籍 詳細検索</h1>
+                    <p class="text-white-50">お探しの本を様々な条件で検索できます。</p>
+                </div>
+
+                <div class="card shadow-lg">
+                    <div class="card-body p-4">
+                        <form>
+                            <div class="mb-4">
+                                <label for="keyword" class="form-label fs-5">キーワード</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control form-control-lg" id="keyword" placeholder="タイトル、著者名、ISBNなど">
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4">
+
+                            <h5 class="mb-3"><i class="bi bi-sliders"></i> 詳細検索条件</h5>
+                            <div class="border rounded p-3 mb-4">
+                                <div class="row g-4">
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">ジャンル (複数選択可)</label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="genre1"><label class="form-check-label" for="genre1">文学・小説</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="genre2"><label class="form-check-label" for="genre2">ビジネス</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="genre3"><label class="form-check-label" for="genre3">コンピュータ・IT</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" id="genre4"><label class="form-check-label" for="genre4">趣味・実用</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <label class="form-label fw-bold">本の形式</label>
+                                        <div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bookFormat" id="format1" checked><label class="form-check-label" for="format1">すべて</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bookFormat" id="format2"><label class="form-check-label" for="format2">単行本</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bookFormat" id="format3"><label class="form-check-label" for="format3">文庫本</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="bookFormat" id="format4"><label class="form-check-label" for="format4">電子書籍</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="publishYear" class="form-label fw-bold">出版年: <output id="yearOutput">2000</output> 年以降</label>
+                                        <input type="range" class="form-range" id="publishYear" min="1980" max="2025" step="1" value="2000">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="sortOrder" class="form-label fw-bold">並び順</label>
+                                        <select class="form-select" id="sortOrder">
+                                            <option selected>関連度順</option>
+                                            <option value="1">発売日の新しい順</option>
+                                            <option value="2">価格の安い順</option>
+                                            <option value="3">評価の高い順</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold d-block">評価</label>
+                                        <div class="rating">
+                                            <input type="radio" name="rating" id="rating5" value="5"><label for="rating5">★</label>
+                                            <input type="radio" name="rating" id="rating4" value="4"><label for="rating4">★</label>
+                                            <input type="radio" name="rating" id="rating3" value="3"><label for="rating3">★</label>
+                                            <input type="radio" name="rating" id="rating2" value="2"><label for="rating2">★</label>
+                                            <input type="radio" name="rating" id="rating1" value="1"><label for="rating1">★</label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        <label for="language" class="form-label fw-bold">言語</label>
+                                        <select class="form-select" id="language">
+                                            <option selected>すべて</option>
+                                            <option value="ja">日本語</option>
+                                            <option value="en">英語</option>
+                                            <option value="fr">フランス語</option>
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="reset" class="btn btn-outline-secondary"><i class="bi bi-arrow-counterclockwise"></i> 条件をリセット</button>
+                                <button type="submit" class="btn btn-primary btn-lg px-4"><i class="bi bi-book-fill"></i> この条件で検索する</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script>
+        const range = document.getElementById('publishYear');
+        const output = document.getElementById('yearOutput');
+        output.textContent = range.value;
+        range.addEventListener('input', (event) => {
+            output.textContent = event.target.value;
+        });
+    </script>
+</body>
 </html>
